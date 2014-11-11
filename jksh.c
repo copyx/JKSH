@@ -2,7 +2,7 @@
  * @file jksh.c
  * @brief
  * This is my own shell.
- * @todo
+ *
  * The prompt should be "(username)@(hostname):(cwd)$".
  * Implement the following built-in functions.
  * 	- echo

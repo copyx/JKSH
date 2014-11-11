@@ -1,4 +1,5 @@
 #include "builtin.h"
+#include <string.h>
 
 /**
  * @fn void echo()
