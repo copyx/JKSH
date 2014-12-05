@@ -1,31 +1,35 @@
 #include "builtin.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include "util.h"
 
 /**
  * @fn void echo()
  * @brief
  * Print string on STDOUT.
  */
-void echo()
+void echo(char *opt)
 {
-
+	printf("%s", opt);
 }
 
 /**
- * @fn void handle_Command
+ * @fn void whoami()
  * @brief
- * Built-in functions
- * 	- echo
- * 	- whoami
- * 	- export
+ * Print current user's name.
  */
-void handle_Command(char *command)
+void whoami()
 {
-	char *cmd_tok = strtok(command, " ");
+	char *username = get_Username();
+	printf("%s\n", username);
+	free(username);
 
-	if (!strcmp(cmd_tok, "echo")) {
-	} else if (!strcmp(cmd_tok, "whoami")) {
-	} else if (!strcmp(cmd_tok, "export")) {
-	} else {
-	}
+}
+
+void export(char *opt)
+{
+	/* fnp */
+	// while ((opt = getopt()))
 }
