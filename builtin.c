@@ -3,9 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
+#include <unistd.h>
 #include "util.h"
 
-const char copyright[] = "Copyright (C) 2014 J. K. Kim <copy_x@naver.com>";
+const char *copyright = "Copyright (C) 2014 J. K. Kim <copy_x@naver.com>";
 
 /**
  * @fn void replace_Escapes(char *s)
@@ -74,37 +75,39 @@ void replace_Escapes(char *s)
 void echo(int argc, char **argv)
 {
 	struct option options[] = {
-		{"help", 0, 0, 0},
-		{"version", 0, 0, 0}
+		{"help", 0, 0, 'h'},
+		{"version", 0, 0, 'v'},
+		{0, 0, 0, 0}
 	};
-	int opt, index, newline = 1, escapes = 0;
+	int opt, newline = 1, escapes = 0;
 	int cmd_cnt = 0;
 
+	extern int optind;
 	optind = 1;
 
-	while ((opt = getopt_long(argc, argv, "neE", options, &index)) != -1) {
+	while ((opt = getopt_long(argc, argv, "neE", options, NULL)) != -1) {
 		++cmd_cnt;
 		switch (opt) {
-		case 0:
-			switch (index) {
-			case 0:	/* help */
-				printf("echo [SHORT-OPTION]... [STRING]...\n"
-					"echo LONG-OPTION\n"
-					"-n\tdo not output the trailing"
-					" newline\n"
-					"-e\tenable interpretation of"
-					" backslash escapes\n"
-					"-E\tdisable interpretation of"
-					" backslash escapes (default)\n");
-				return;
+		case 'h':	/* help */
+			printf("Write arguments to"
+				" the standard output.\n\n"
+				"echo [SHORT-OPTION]... [STRING]...\n"
+				"echo LONG-OPTION\n\n"
+				"-n    do not output the trailing"
+				" newline\n"
+				"-e    enable interpretation of"
+				" backslash escapes\n"
+				"-E    disable interpretation of"
+				" backslash escapes (default)\n\n"
+				"--help     Print help script\n"
+				"--version  Print version\n");
+			return;
 
 
-			case 1: /* version */
-				printf("echo (JKsh coreutils) 0.1.0\n");
-				printf("%s\n", copyright);
-				return;
-			}
-			break;
+		case 'v': /* version */
+			printf("echo (JKsh coreutils) 0.1.0\n");
+			printf("%s\n", copyright);
+			return;
 
 		case 'n':
 			newline = 0;
@@ -117,13 +120,17 @@ void echo(int argc, char **argv)
 		case 'E':
 			escapes = 0;
 			break;
+
+		case '?':
+			printf("Error\n");
+			printf("%s\n", argv[1]);
+			return;
 		}
 	}
 
-	if (escapes)
-		replace_Escapes(argv[optind]);
-
 	while (++cmd_cnt < argc) {
+		if (escapes)
+			replace_Escapes(argv[cmd_cnt]);
 		printf("%s", argv[cmd_cnt]);
 		//cmd_cnt++;
 	}
@@ -137,18 +144,80 @@ void echo(int argc, char **argv)
  * @brief
  * Print current user's name.
  */
-void whoami()
+void whoami(int argc, char **argv)
 {
-	char *username = get_Username();
+	struct option options[] = {
+		{"help", 0, 0, 'h'},
+		{"version", 0, 0, 'v'},
+		{0, 0, 0, 0}
+	};
+	int opt;
+	char *username;
+	extern int optind, opterr, optopt;
+
+	optind = 1;
+
+	while ((opt = getopt_long_only(argc, argv, "", options, NULL)) != -1) {
+		switch (opt) {
+		case 'h':
+			printf("Print the user name associated with"
+				" the current effective user ID.\n\n"
+				"--help     Print help script\n"
+				"--version  Print version\n");
+			return;
+
+
+		case 'v': /* version */
+			printf("whoami (JKsh coreutils) 0.1.0\n");
+			printf("%s\n", copyright);
+			return;
+
+		case '?':
+			printf("Error: %c", optopt);
+			printf("%s\n", argv[optind - 1]);
+			return;
+		}
+	}
+
+	username = get_Username();
 	printf("%s\n", username);
 	free(username);
-
 }
 
 void export(int argc, char **argv)
 {
-	int opt;
-	/* fnp */
-	while ((opt = getopt(argc, argv, "a:b:c:")) != -1) {
+	int opt, print = 0, remove = 0;
+	char *name, *value;
+	extern int optind;
+	optind = 1;
+
+	while ((opt = getopt(argc, argv, "fn:p")) != -1) {
+		switch (opt) {
+		case 'f':	/* Refer to shell functions */
+			break;
+
+		case 'n':	/* Remove */
+			remove = 1;
+			name = optarg;
+			break;
+
+		case 'p':	/* Print */
+			print = 1;
+			break;
+
+		case '?':
+			printf("Error\n");
+			printf("%s\n", argv[1]);
+			return;
+		}
+	}
+
+	if (remove) {
+		unsetenv(name);
+	} else if (print || argc == 1) {
+	} else {
+		name = strtok(argv[1], "=");
+		value = name + strlen(name) + 1;
+		setenv(name, value, 1);
 	}
 }

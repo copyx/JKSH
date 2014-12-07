@@ -138,7 +138,7 @@ void handle_Command(char *command)
 			}
 		} else if (cmd_len == 6) {
 			if (!strcmp(argv[0], "whoami"))
-				whoami();
+				whoami(argc, argv);
 			else if (!strcmp(argv[0], "export"))
 				export(argc, argv);
 		} else {

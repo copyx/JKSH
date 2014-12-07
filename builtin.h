@@ -2,7 +2,7 @@
 #define __BUILTIN_H__
 
 void echo(int, char **);
-void whoami();
+void whoami(int, char **);
 void export(int, char **);
 
 #endif
