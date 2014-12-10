@@ -2,10 +2,10 @@
 #include <sys/types.h>
 #include <sys/utsname.h>
 #include <pwd.h>
+#include <grp.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
-#include <unistd.h>
 #include <stdlib.h>
 #include "builtin.h"
 /**
@@ -15,11 +15,18 @@
  *
  * @return user name string
  */
-char *get_Username()
+char *get_Username(uid_t uid)
 {
-	struct passwd *pwd = getpwuid(getuid());
+	struct passwd *pwd = getpwuid(uid);
 
-	return strdup(pwd->pw_name);
+	return pwd->pw_name;
+}
+
+char *get_Groupname(gid_t gid)
+{
+	struct group *grp = getgrgid(gid);
+
+	return grp->gr_name;
 }
 
 /**
@@ -51,7 +58,7 @@ void print_Prompt()
 	char *username, *hostname, *cwd;
 	long path_len;
 
-	username = get_Username();
+	username = get_Username(getuid());
 	hostname = get_Hostname();
 
 	path_len = pathconf("/", _PC_PATH_MAX);
@@ -59,7 +66,6 @@ void print_Prompt()
 
 	printf("%s@%s:%s$ ", username, hostname, cwd);
 
-	free(username);
 	free(hostname);
 	free(cwd);
 }
@@ -132,7 +138,11 @@ void handle_Command(char *command)
 
 
 	if (argc > 0) {
-		if (cmd_len == 4) {
+		if (cmd_len == 2) {
+			if (!strcmp(argv[0], "ls")) {
+				ls(argc, argv);
+			}
+		} else if (cmd_len == 4) {
 			if (!strcmp(argv[0], "echo")) {
 				echo(argc, argv);
 			}

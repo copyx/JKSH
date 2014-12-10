@@ -1,5 +1,5 @@
-#ifndef __ECHO_H_
-#define __ECHO_H_
+#ifndef __ECHO_H__
+#define __ECHO_H__
 
 void echo(int, char **);
 

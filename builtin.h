@@ -4,5 +4,6 @@
 #include "builtin/echo.h"
 #include "builtin/whoami.h"
 #include "builtin/export.h"
+#include "builtin/ls.h"
 
 #endif

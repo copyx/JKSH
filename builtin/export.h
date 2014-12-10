@@ -1,5 +1,5 @@
-#ifndef __EXPORT_H_
-#define __EXPORT_H_
+#ifndef __EXPORT_H__
+#define __EXPORT_H__
 
 void export(int, char **);
 

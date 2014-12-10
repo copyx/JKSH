@@ -22,7 +22,7 @@ void export(int argc, char **argv)
 	int opt, print = 0, remove = 0;
 	char *name, *value;
 	extern int optind;
-	extern int optind, opterr, optopt;
+	extern int optind, optopt;
 	optind = 0;
 
 	while ((opt = getopt_long(argc, argv, "n:p", options, NULL)) != -1) {
@@ -30,7 +30,6 @@ void export(int argc, char **argv)
 		case 'h':	/* help */
 			printf("%s", help);
 			return;
-
 
 		case 'v': /* version */
 			printf("export (JKsh coreutils) 0.1.0\n");
