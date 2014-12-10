@@ -70,7 +70,7 @@ void replace_Escapes(char *s)
 /**
  * @fn void echo()
  * @brief
- * Print string on STDOUT.
+ * Print string on STDOUT.157
  */
 void echo(int argc, char **argv)
 {
@@ -82,10 +82,10 @@ void echo(int argc, char **argv)
 	int opt, newline = 1, escapes = 0;
 	int cmd_cnt = 0;
 
-	extern int optind;
-	optind = 1;
+	extern int optind, optopt, optreset;
+	optind = 0;
 
-	while ((opt = getopt_long(argc, argv, "neE", options, NULL)) != -1) {
+	while ((opt = getopt_long(argc, argv, "neEhv", options, NULL)) != -1) {
 		++cmd_cnt;
 		switch (opt) {
 		case 'h':	/* help */
@@ -122,8 +122,8 @@ void echo(int argc, char **argv)
 			break;
 
 		case '?':
-			printf("Error\n");
-			printf("%s\n", argv[1]);
+			printf("Error: %c", optopt);
+			printf("%s\n", argv[optind - 1]);
 			return;
 		}
 	}
@@ -153,11 +153,10 @@ void whoami(int argc, char **argv)
 	};
 	int opt;
 	char *username;
-	extern int optind, opterr, optopt;
+	extern int optind, opterr, optopt, optreset;
+	optind = 0;
 
-	optind = 1;
-
-	while ((opt = getopt_long_only(argc, argv, "", options, NULL)) != -1) {
+	while ((opt = getopt_long(argc, argv, "hv", options, NULL)) != -1) {
 		switch (opt) {
 		case 'h':
 			printf("Print the user name associated with"
@@ -189,7 +188,9 @@ void export(int argc, char **argv)
 	int opt, print = 0, remove = 0;
 	char *name, *value;
 	extern int optind;
-	optind = 1;
+	extern char **environ;
+	extern int optind, opterr, optopt, optreset;
+	optind = 0;
 
 	while ((opt = getopt(argc, argv, "fn:p")) != -1) {
 		switch (opt) {
@@ -215,6 +216,8 @@ void export(int argc, char **argv)
 	if (remove) {
 		unsetenv(name);
 	} else if (print || argc == 1) {
+		/* export */
+		printf("Not implemented\n");
 	} else {
 		name = strtok(argv[1], "=");
 		value = name + strlen(name) + 1;
