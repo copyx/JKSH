@@ -1,8 +1,8 @@
 #ifndef __BUILTIN_H__
 #define __BUILTIN_H__
 
-void echo(int, char **);
-void whoami(int, char **);
-void export(int, char **);
+#include "echo.h"
+#include "whoami.h"
+#include "export.h"
 
 #endif
