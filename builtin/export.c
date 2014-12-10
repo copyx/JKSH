@@ -9,6 +9,8 @@ static char *help = "export: export [-fn] [name[=value] ...] or export -p\n"
 	"Set export attribute for shell variables.\n\n"
 	"Options:\n"
 	"      -n	remove the export property from each NAME\n"
+	"      -p       display a list of all exported variables and functions\n"
+
 	"      --help     Print help script\n"
 	"      --version  Print version\n";
 
