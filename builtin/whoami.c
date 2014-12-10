@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
-#include "util.h"
-#include "version.h"
+#include "../util.h"
+#include "../version.h"
 
 static const char *help = "Print the user name associated with"
 	" the current effective user ID.\n\n"

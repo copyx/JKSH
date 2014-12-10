@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
-#include "version.h"
+#include "../version.h"
 
 static char *help = "export: export [-fn] [name[=value] ...] or export -p\n"
 	"Set export attribute for shell variables.\n\n"

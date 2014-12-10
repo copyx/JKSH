@@ -1,7 +1,7 @@
 #include "echo.h"
 #include <stdio.h>
 #include <getopt.h>
-#include "version.h"
+#include "../version.h"
 
 static char *help = "echo: echo [-neE] [arg ...]\n"
 	"Write arguments to the standard output.\n\n"
