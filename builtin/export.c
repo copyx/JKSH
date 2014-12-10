@@ -19,10 +19,10 @@ void export(int argc, char **argv)
 		{"version", 0, 0, 'v'},
 		{0, 0, 0, 0}
 	};
-	int opt, print = 0, remove = 0;
-	char *name, *value;
-	extern int optind;
+	int opt, print = 0, remove = 0, i;
+	char *name, *value, *env;
 	extern int optind, optopt;
+	extern char **environ;
 	optind = 0;
 
 	while ((opt = getopt_long(argc, argv, "n:p", options, NULL)) != -1) {
@@ -59,10 +59,14 @@ void export(int argc, char **argv)
 
 	if (remove) {
 		unsetenv(name);
-	} /*else if (print || argc == 1) {
-		 export
-		printf("Not implemented\n");
-	}*/ else {
+	} else if (print || argc == 1) {
+		env = *environ;
+		i = 0;
+		while (env) {
+			printf("%s\n", env);
+			env = *(environ + i++);
+		}
+	} else {
 		name = strtok(argv[1], "=");
 		value = name + strlen(name) + 1;
 		setenv(name, value, 1);
