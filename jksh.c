@@ -8,16 +8,14 @@
 
 int main()
 {
-	char *command;
-	size_t len = 0;
+	char command[4096];
 
 	while (1) {
 		/* print prompt */
 		print_Prompt();
 
 		/* read command */
-
-		if (getline(&command, &len, stdin) != -1)
+		if (fgets(command, 4096, stdin) != NULL)
 			/* process command */
 			handle_Command(command);
 	}
