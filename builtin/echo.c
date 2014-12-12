@@ -6,9 +6,9 @@
 static char *help = "echo: echo [-neE] [arg ...]\n"
 	"Write arguments to the standard output.\n\n"
 	"Options:\n"
-	"      -n	do not append a newline\n"
-	"      -e	enable interpretation of the following backslash escapes\n"
-	"      -E	explicitly suppress interpretation of backslash escapes\n\n"
+	"      -n      do not append a newline\n"
+	"      -e      enable interpretation of the following backslash escapes\n"
+	"      -E      explicitly suppress interpretation of backslash escapes\n\n"
 	"      --help     Print help script\n"
 	"      --version  Print version\n";
 
@@ -83,10 +83,10 @@ void echo(int argc, char **argv)
 		{"version", 0, 0, 'v'},
 		{0, 0, 0, 0}
 	};
-	int opt, newline = 1, escapes = 0;
-	int cmd_cnt = 0;
+	int opt, newline = 1, escapes = 0, cmd_cnt = 0;
 
 	extern int optind, optopt;
+
 	optind = 0;
 
 	while ((opt = getopt_long(argc, argv, "neEhv", options, NULL)) != -1) {
@@ -95,7 +95,6 @@ void echo(int argc, char **argv)
 		case 'h':	/* help */
 			printf("%s", help);
 			return;
-
 
 		case 'v': /* version */
 			printf("echo (JKsh coreutils) 0.1.0\n");

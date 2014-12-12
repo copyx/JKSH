@@ -9,6 +9,8 @@ static char *help = "export: export [-fn] [name[=value] ...] or export -p\n"
 	"Set export attribute for shell variables.\n\n"
 	"Options:\n"
 	"      -n	remove the export property from each NAME\n"
+	"      -p       display a list of all exported variables and functions\n"
+
 	"      --help     Print help script\n"
 	"      --version  Print version\n";
 
@@ -19,10 +21,10 @@ void export(int argc, char **argv)
 		{"version", 0, 0, 'v'},
 		{0, 0, 0, 0}
 	};
-	int opt, print = 0, remove = 0;
-	char *name, *value;
-	extern int optind;
-	extern int optind, opterr, optopt;
+	int opt, print = 0, remove = 0, i;
+	char *name, *value, *env;
+	extern int optind, optopt;
+	extern char **environ;
 	optind = 0;
 
 	while ((opt = getopt_long(argc, argv, "n:p", options, NULL)) != -1) {
@@ -30,7 +32,6 @@ void export(int argc, char **argv)
 		case 'h':	/* help */
 			printf("%s", help);
 			return;
-
 
 		case 'v': /* version */
 			printf("export (JKsh coreutils) 0.1.0\n");
@@ -60,10 +61,14 @@ void export(int argc, char **argv)
 
 	if (remove) {
 		unsetenv(name);
-	} /*else if (print || argc == 1) {
-		 export
-		printf("Not implemented\n");
-	}*/ else {
+	} else if (print || argc == 1) {
+		env = *environ;
+		i = 0;
+		while (env) {
+			printf("%s\n", env);
+			env = *(environ + i++);
+		}
+	} else {
 		name = strtok(argv[1], "=");
 		value = name + strlen(name) + 1;
 		setenv(name, value, 1);

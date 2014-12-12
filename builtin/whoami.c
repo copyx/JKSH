@@ -12,7 +12,7 @@ static const char *help = "Print the user name associated with"
 	"--version  Print version\n";
 
 /**
- * @fn void whoami()
+ * @fn void whoami(int argc, char **argv)
  * @brief
  * Print current user's name.
  */
@@ -25,7 +25,7 @@ void whoami(int argc, char **argv)
 	};
 	int opt;
 	char *username;
-	extern int optind, opterr, optopt;
+	extern int optind, optopt;
 	optind = 0;
 
 	while ((opt = getopt_long(argc, argv, "hv", options, NULL)) != -1) {
@@ -33,7 +33,6 @@ void whoami(int argc, char **argv)
 		case 'h':
 			printf("%s", help);
 			return;
-
 
 		case 'v': /* version */
 			printf("whoami (JKsh coreutils) 0.1.0\n");
@@ -47,7 +46,6 @@ void whoami(int argc, char **argv)
 		}
 	}
 
-	username = get_Username();
+	username = get_Username(getuid());
 	printf("%s\n", username);
-	free(username);
 }

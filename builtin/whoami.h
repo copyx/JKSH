@@ -1,5 +1,5 @@
-#ifndef __WHOAMI_H_
-#define __WHOAMI_H_
+#ifndef __WHOAMI_H__
+#define __WHOAMI_H__
 
 void whoami(int, char **);
 
